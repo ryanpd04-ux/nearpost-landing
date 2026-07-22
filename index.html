@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nearpost — Google Maps Growth for Contractors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0C1628;
+  --navy-mid: #142038;
+  --navy-light: #1E2E4A;
+  --green: #16A34A;
+  --green-light: #22C55E;
+  --green-bg: #F0FDF4;
+  --green-border: #86EFAC;
+  --star: #F59E0B;
+  --text: #111827;
+  --muted: #6B7280;
+  --bg: #FAFAFA;
+  --white: #FFFFFF;
+  --border: #E5E7EB;
+  --display: 'Plus Jakarta Sans', sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+/* ===== ICON SYSTEM ===== */
+.icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+.no-photos-icon svg { width: 26px; height: 26px; color: #B0B6C0; }
+.gbp-warn svg { width: 12px; height: 12px; color: #92400E; }
+.gbp-post svg { width: 12px; height: 12px; color: #1A73E8; margin-right: 3px; }
+.rev-resp svg { width: 11px; height: 11px; color: #16A34A; margin-right: 2px; }
+.prob-ico svg { width: 26px; height: 26px; color: #92400E; }
+.deliv-ico svg { width: 21px; height: 21px; color: var(--green); }
+.founding-chip svg { width: 11px; height: 11px; }
+.chk svg { width: 15px; height: 15px; display: block; }
+.foot-logo { display: flex; align-items: center; gap: 8px; }
+
+/* ===== NAV ===== */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo {
+  font-family: var(--display); font-size: 20px; font-weight: 800;
+  color: var(--navy); text-decoration: none;
+  display: flex; align-items: center; gap: 9px;
+}
+.logo-pin {
+  width: 26px; height: 26px;
+  background: var(--green); border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-pin-dot { width: 9px; height: 9px; background: white; border-radius: 50%; transform: rotate(45deg); }
+.nav-cta {
+  background: var(--green); color: white;
+  font-family: var(--display); font-size: 14px; font-weight: 700;
+  padding: 10px 22px; border-radius: 8px;
+  text-decoration: none; transition: background 0.2s; border: none; cursor: pointer;
+}
+.nav-cta:hover { background: #15803D; }
+
+/* ===== HERO ===== */
+.hero { background: var(--navy); padding: 80px 24px 0; overflow: hidden; }
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3);
+  color: #4ADE80; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 24px;
+}
+.eyebrow-dot {
+  width: 6px; height: 6px; background: #4ADE80; border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+.hero h1 {
+  font-family: var(--display); font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800; color: #FFF; line-height: 1.1;
+  max-width: 680px; margin-bottom: 22px; letter-spacing: -0.02em;
+}
+.hero h1 .hi { color: #4ADE80; }
+.hero-sub { font-size: 18px; color: #94A3B8; max-width: 560px; line-height: 1.65; margin-bottom: 36px; }
+.hero-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 64px; }
+.btn-primary {
+  background: var(--green); color: white;
+  font-family: var(--display); font-size: 16px; font-weight: 700;
+  padding: 16px 32px; border-radius: 10px; text-decoration: none;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  border: none; cursor: pointer;
+}
+.btn-primary:hover { background: #15803D; transform: translateY(-1px); }
+.btn-ghost { color: #94A3B8; font-size: 14px; text-decoration: none; transition: color 0.2s; }
+.btn-ghost:hover { color: white; }
+
+/* ===== GBP COMPARISON ===== */
+.comparison-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; max-width: 800px; margin: 0 auto;
+}
+.gbp-card {
+  background: white; border-radius: 12px 12px 0 0;
+  overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+  position: relative;
+}
+.gbp-badge {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 4px; z-index: 5;
+}
+.badge-before { background: #FEE2E2; color: #991B1B; }
+.badge-after { background: #D1FAE5; color: #065F46; }
+
+/* Photo strip */
+.gbp-photos-after {
+  display: grid; grid-template-columns: 2fr 1fr 1fr;
+  gap: 2px; height: 114px;
+}
+.ph { background: #6B7280; width: 100%; height: 100%; object-fit: cover; display: block; }
+.ph1 { background: linear-gradient(135deg,#374151,#1F2937); }
+.ph2 { background: linear-gradient(135deg,#4B5563,#374151); }
+.ph3 { background: linear-gradient(135deg,#6B7280,#4B5563); }
+
+.gbp-photos-before {
+  height: 90px; background: #F3F4F6;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.no-photos-icon { font-size: 22px; margin-bottom: 4px; }
+.no-photos-text { font-size: 11px; color: #9CA3AF; font-family: Arial; }
+
+.gbp-body { padding: 12px 14px; }
+.gbp-name { font-size: 14px; font-weight: 700; color: #1A1A1A; font-family: Arial; margin-bottom: 3px; }
+.gbp-cat { font-size: 11px; color: #555; font-family: Arial; margin-bottom: 7px; }
+.gbp-stars { display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+.gbp-rating { font-size: 12px; font-weight: 700; color: #202124; font-family: Arial; }
+.stars { display: flex; gap: 1px; }
+.s { font-size: 11px; }
+.s.on { color: #F59E0B; }
+.s.off { color: #D1D5DB; }
+.gbp-reviews { font-size: 11px; color: #1A73E8; font-family: Arial; }
+.gbp-hours { font-size: 11px; font-family: Arial; margin-bottom: 7px; }
+.open-txt { color: #188038; font-weight: 600; }
+.closed-txt { color: #888; }
+
+.gbp-warn {
+  display: flex; align-items: center; gap: 5px;
+  background: #FEF3C7; border: 1px solid #FDE68A;
+  border-radius: 5px; padding: 5px 8px;
+  font-size: 10px; color: #92400E; font-family: Arial; margin-bottom: 7px;
+}
+.gbp-desc { font-size: 11px; color: #555; font-family: Arial; line-height: 1.45; margin-bottom: 7px; }
+.gbp-desc.dim { color: #CBD5E1; font-style: italic; }
+
+.gbp-post {
+  background: #F8F9FA; border-radius: 5px; padding: 7px 9px;
+  font-size: 10px; font-family: Arial; margin-bottom: 7px;
+  border-left: 3px solid #1A73E8;
+}
+.gbp-post.dim { border-left-color: #E5E7EB; color: #9AA0A6; }
+.post-lbl { font-size: 9px; color: #9AA0A6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+
+.gbp-review-row {
+  border: 1px solid #F1F3F4; border-radius: 5px; padding: 7px 9px;
+  font-size: 10px; font-family: Arial; margin-bottom: 7px;
+}
+.rev-name { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #202124; margin-bottom: 2px; }
+.rev-text { color: #555; margin-bottom: 4px; line-height: 1.4; }
+.rev-no-resp { color: #EF4444; font-style: italic; }
+.rev-resp { color: #16A34A; }
+
+.gbp-activity { font-size: 10px; font-family: Arial; display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.adot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.adot.on { background: #188038; }
+.adot.off { background: #D1D5DB; }
+.gbp-activity.dim { color: #9AA0A6; }
+.gbp-activity.bright { color: #188038; }
+
+/* ===== STATS BAR ===== */
+.stats-bar { background: var(--navy-mid); padding: 32px 24px; }
+.stats-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; text-align: center;
+}
+.stat-n { font-family: var(--display); font-size: 38px; font-weight: 800; color: #4ADE80; margin-bottom: 4px; }
+.stat-l { font-size: 14px; color: #94A3B8; line-height: 1.4; }
+
+/* ===== SHARED SECTION ===== */
+.sec { padding: 80px 24px; }
+.sec-in { max-width: 1100px; margin: 0 auto; }
+.eyebrow {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--green); margin-bottom: 12px;
+}
+.sec-h {
+  font-family: var(--display); font-size: clamp(26px,4vw,42px);
+  font-weight: 800; color: var(--navy); line-height: 1.12;
+  margin-bottom: 16px; letter-spacing: -0.02em;
+}
+.sec-h.wh { color: white; }
+.sec-p { font-size: 17px; color: var(--muted); max-width: 600px; line-height: 1.65; margin-bottom: 48px; }
+.sec-p.wh { color: #94A3B8; }
+.tc { text-align: center; }
+
+/* ===== PROBLEM ===== */
+.problem-sec { background: white; }
+.prob-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.prob-card { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px; padding: 28px 24px; }
+.prob-ico { font-size: 30px; margin-bottom: 14px; }
+.prob-title { font-family: var(--display); font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.prob-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ===== HOW IT WORKS ===== */
+.how-sec { background: #F3F4F6; }
+.steps-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
+.step { padding: 32px 28px; text-align: center; position: relative; }
+.step-num {
+  width: 60px; height: 60px; background: var(--navy); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-family: var(--display); font-size: 22px;
+  font-weight: 800; color: #4ADE80;
+}
+.step-title { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+.step-text { font-size: 14px; color: var(--muted); line-height: 1.65; }
+.step-conn {
+  position: absolute; top: 62px; right: -1px;
+  width: 50%; height: 2px; background: rgba(22,163,74,0.25);
+}
+.step:last-child .step-conn { display: none; }
+
+/* ===== DELIVERABLES ===== */
+.deliv-sec { background: white; }
+.deliv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.deliv-card {
+  border: 1px solid var(--border); border-radius: 12px; padding: 26px 22px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.deliv-card:hover { border-color: var(--green); box-shadow: 0 4px 20px rgba(22,163,74,0.1); }
+.deliv-card.hi { background: var(--green-bg); border-color: var(--green-border); }
+.deliv-ico {
+  width: 46px; height: 46px; background: var(--green-bg);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 14px;
+}
+.deliv-card.hi .deliv-ico { background: rgba(22,163,74,0.15); }
+.deliv-out { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.deliv-title { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.deliv-text { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+/* ===== PROOF ===== */
+.proof-sec { background: var(--navy); }
+.proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.research-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+.rmetric { background: var(--navy-light); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px 22px; text-align: center; }
+.rmetric .metric-n { font-family: var(--display); font-size: 40px; font-weight: 800; color: #4ADE80; line-height: 1; margin-bottom: 12px; }
+.rmetric .metric-l { font-size: 14px; color: #CBD5E1; line-height: 1.55; margin-bottom: 14px; }
+.metric-src { font-size: 11px; color: #64748B; font-style: italic; }
+.metrics { display: flex; flex-direction: column; gap: 24px; }
+.metric { display: flex; align-items: flex-start; gap: 16px; }
+.metric-n { font-family: var(--display); font-size: 44px; font-weight: 800; color: #4ADE80; line-height: 1; flex-shrink: 0; }
+.metric-l { font-size: 14px; color: #94A3B8; padding-top: 6px; line-height: 1.5; }
+.tcard { background: var(--navy-light); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 32px; }
+.t-stars { color: var(--star); font-size: 18px; margin-bottom: 16px; }
+.t-text { font-size: 18px; color: #E2E8F0; line-height: 1.6; margin-bottom: 24px; font-style: italic; }
+.t-author { display: flex; align-items: center; gap: 12px; }
+.t-av {
+  width: 44px; height: 44px; background: var(--green); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 800; color: white; font-size: 16px; flex-shrink: 0;
+}
+.t-name { font-weight: 700; color: white; font-size: 15px; }
+.t-role { font-size: 13px; color: #94A3B8; }
+
+/* ===== PRICING ===== */
+.pricing-sec { background: var(--bg); }
+.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; align-items: start; }
+.pcard { background: white; border: 2px solid var(--border); border-radius: 16px; padding: 30px 26px; position: relative; }
+.pcard.feat { border-color: var(--green); transform: scale(1.025); box-shadow: 0 16px 48px rgba(22,163,74,0.15); }
+.feat-badge {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: white; font-size: 11px; font-weight: 800;
+  padding: 4px 16px; border-radius: 20px; text-transform: uppercase;
+  letter-spacing: 0.08em; white-space: nowrap;
+}
+.p-phase { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+.founding-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #FEF3C7; border: 1px solid #FDE68A;
+  color: #92400E; font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+  letter-spacing: 0.07em; margin-bottom: 10px;
+}
+.p-name { font-family: var(--display); font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+.p-price { font-family: var(--display); font-size: 46px; font-weight: 800; color: var(--navy); line-height: 1; margin: 14px 0 4px; }
+.p-price sup { font-size: 22px; vertical-align: top; margin-top: 10px; display: inline-block; }
+.p-per { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.p-div { height: 1px; background: var(--border); margin-bottom: 22px; }
+.p-feats { list-style: none; margin-bottom: 26px; }
+.p-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 13.5px; color: var(--text); margin-bottom: 10px; line-height: 1.45; }
+.chk { color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.p-btn {
+  display: block; width: 100%; text-align: center;
+  background: var(--navy); color: white;
+  font-family: var(--display); font-weight: 700; font-size: 15px;
+  padding: 14px; border-radius: 10px; text-decoration: none;
+  border: none; cursor: pointer; transition: all 0.2s;
+}
+.p-btn:hover { background: #1E3A6E; }
+.p-btn.g { background: var(--green); }
+.p-btn.g:hover { background: #15803D; }
+.p-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
+
+/* ===== CTA / AUDIT ===== */
+.cta-sec { background: linear-gradient(135deg, #0A1F0E 0%, #14532D 100%); padding: 80px 24px; }
+.cta-wrap { max-width: 640px; margin: 0 auto; text-align: center; }
+.cta-wrap h2 { font-family: var(--display); font-size: clamp(26px,4vw,40px); font-weight: 800; color: white; line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.02em; }
+.cta-wrap p { font-size: 17px; color: #86EFAC; margin-bottom: 36px; line-height: 1.6; }
+.aform { background: white; border-radius: 16px; padding: 28px 30px; text-align: left; }
+.aform h3 { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 20px; text-align: center; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.ff { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.ff label { font-size: 13px; font-weight: 600; color: var(--navy); }
+.ff input {
+  padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: var(--body); color: var(--text);
+  transition: border-color 0.2s; background: #FAFAFA;
+}
+.ff input:focus { outline: none; border-color: var(--green); background: white; }
+.ff input::placeholder { color: #D1D5DB; }
+.fsub {
+  width: 100%; background: var(--green); color: white;
+  font-family: var(--display); font-weight: 700; font-size: 16px;
+  padding: 15px; border-radius: 10px; border: none; cursor: pointer;
+  transition: background 0.2s; margin-top: 4px;
+}
+.fsub:hover { background: #15803D; }
+.fnote { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
+
+/* ===== FAQ ===== */
+.faq-sec { background: white; }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 40px; }
+.faq-item { border-bottom: 1px solid var(--border); padding-bottom: 22px; }
+.faq-q { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 9px; }
+.faq-a { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ===== FOOTER ===== */
+footer { background: var(--navy); padding: 36px 24px; }
+.foot-in { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.foot-logo { font-family: var(--display); font-size: 18px; font-weight: 800; color: white; }
+.foot-txt { font-size: 13px; color: #475569; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero { padding: 56px 20px 0; }
+  .comparison-wrap { grid-template-columns: 1fr; max-width: 340px; }
+  .stats-inner, .prob-grid, .steps-row, .deliv-grid, .proof-grid, .pricing-grid, .faq-grid, .research-grid { grid-template-columns: 1fr; }
+  .pcard.feat { transform: none; }
+  .frow { grid-template-columns: 1fr; }
+  .foot-in { flex-direction: column; text-align: center; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .step-conn { display: none; }
+  .metric-n { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ICON SYSTEM — replaces all emoji with a consistent line-icon set -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.8 12.3l2.7 2.7L16.3 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 3.2L22 20.5H2L12 3.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><line x1="12" y1="9.3" x2="12" y2="14.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3.5 8h3.3L8.4 5.7h7.2L17.2 8h3.3a1 1 0 011 1v9.2a1 1 0 01-1 1H3.5a1 1 0 01-1-1V9a1 1 0 011-1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="13.2" r="3.3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-thermometer" viewBox="0 0 24 24"><path d="M13 14.9V5.3a1.8 1.8 0 00-3.6 0v9.6a3.6 3.6 0 103.6 0z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-flatline" viewBox="0 0 24 24"><path d="M2.5 12h5l1.8-5.2L12.5 17l2-8h3l1.2 3h2.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M3.7 4.8h16.6v11.3H9.2l-4.3 3.7v-3.7H3.7V4.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trend-down" viewBox="0 0 24 24"><path d="M3.5 6.5l6.6 6.6 4-4L20.5 17.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.5 10.2v7.2h-7.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4.2L19 9.2a2.2 2.2 0 000-3.1l-1.1-1.1a2.2 2.2 0 00-3.1 0L4 15.8V20z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13 6.9l4.1 4.1" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.6l2.7 5.7 6.2.6-4.6 4.3 1.3 6.2L12 17.1l-5.6 3.3 1.3-6.2-4.6-4.3 6.2-.6L12 3.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M15.3 5.6a4.3 4.3 0 00-5.6 5.2L4 15.5v3.9h3.9l4.7-4.7a4.3 4.3 0 005.2-5.6l-2.8 2.8-2.1-2.1 2.4-2.2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="19.8" y1="19.8" x2="15.4" y2="15.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-bar-chart" viewBox="0 0 24 24"><line x1="5" y1="19" x2="5" y2="12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="19" x2="19" y2="9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 3.4l7.5 2.7v6c0 4.6-3.1 7.7-7.5 9.1-4.4-1.4-7.5-4.5-7.5-9.1v-6L12 3.4z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.6 12.2l2.4 2.4 4.4-4.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 11V7.6a4 4 0 018 0V11" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11.5A7 7 0 105 9.5C5 14.7 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.3" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-pin"><div class="logo-pin-dot"></div></div>
+      Nearpost
+    </a>
+    <a href="#audit" class="nav-cta">Get Free Audit →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span> For HVAC · Plumbing · Roofing · Electrical Contractors</div>
+    <h1>Your Competitors Are Getting <span class="hi">Calls You Should Be Getting.</span></h1>
+    <p class="hero-sub">We manage and optimize your Google Business Profile every week — so you rank higher on Google Maps, earn more trust, and book more jobs without lifting a finger.</p>
+    <div class="hero-actions">
+      <a href="#audit" class="btn-primary">Get Your Free Profile Audit →</a>
+      <a href="#how" class="btn-ghost">See how it works ↓</a>
+    </div>
+
+    <!-- BEFORE / AFTER GBP CARD COMPARISON -->
+    <div class="comparison-wrap">
+
+      <!-- BEFORE -->
+      <div class="gbp-card">
+        <span class="gbp-badge badge-before">Before</span>
+        <div class="gbp-photos-before">
+          <div class="no-photos-icon"><svg class="icon"><use href="#i-camera"/></svg></div>
+          <div class="no-photos-text">No photos uploaded</div>
+        </div>
+        <div class="gbp-body">
+          <div class="gbp-name">Mike's HVAC Services</div>
+          <div class="gbp-cat">Heating &amp; Air Conditioning</div>
+          <div class="gbp-stars">
+            <span class="gbp-rating">3.1</span>
+            <div class="stars"><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span><span class="s off">★</span><span class="s off">★</span></div>
+            <span class="gbp-reviews">9 reviews</span>
+          </div>
+          <div class="gbp-hours"><span class="closed-txt">Closed · Opens 8 AM</span></div>
+          <div class="gbp-warn"><svg class="icon"><use href="#i-warning"/></svg> Business description missing</div>
+          <div class="gbp-desc dim">No description added yet.</div>
+          <div class="gbp-post dim">
+            <div class="post-lbl">Latest Post</div>
+            No posts in 8 months
+          </div>
+          <div class="gbp-review-row">
+            <div class="rev-name"><span class="stars"><span class="s on">★</span><span class="s on">★</span><span class="s off">★</span><span class="s off">★</span><span class="s off">★</span></span><span>— J. Thompson</span></div>
+            <div class="rev-text">"Showed up 3 hours late with no call ahead. Still waiting for my invoice..."</div>
+            <div class="rev-no-resp">Owner has not responded</div>
+          </div>
+          <div class="gbp-activity dim"><div class="adot off"></div>Last active 8 months ago</div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="gbp-card">
+        <span class="gbp-badge badge-after">After</span>
+        <div class="gbp-photos-after">
+          <img class="ph" src="images/after-1.jpg" alt="HVAC technician servicing a unit">
+          <img class="ph" src="images/after-2.jpg" alt="HVAC service van">
+          <img class="ph" src="images/after-3.jpg" alt="Completed HVAC installation">
+        </div>
+        <div class="gbp-body">
+          <div class="gbp-name">Mike's HVAC Services</div>
+          <div class="gbp-cat">HVAC Contractor · Serving Tulsa, OK</div>
+          <div class="gbp-stars">
+            <span class="gbp-rating">4.9</span>
+            <div class="stars"><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span></div>
+            <span class="gbp-reviews">84 reviews</span>
+          </div>
+          <div class="gbp-hours"><span class="open-txt">Open now · Closes 6 PM</span></div>
+          <div class="gbp-desc">Family-owned HVAC company serving Tulsa since 2009. Same-day AC repair, furnace installs &amp; seasonal tune-ups. Licensed, insured, and 5-star rated.</div>
+          <div class="gbp-post">
+            <div class="post-lbl">Latest Post · 3 days ago</div>
+            <svg class="icon"><use href="#i-thermometer"/></svg>Beat the heat — schedule your AC tune-up before the summer rush hits. Book online or call us today!
+          </div>
+          <div class="gbp-review-row">
+            <div class="rev-name"><span class="stars"><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span><span class="s on">★</span></span><span>— Sarah M.</span></div>
+            <div class="rev-text">"Fast, professional, and fair pricing. Mike's team is the only HVAC company I'll ever call."</div>
+            <div class="rev-resp"><svg class="icon"><use href="#i-check-circle"/></svg>Owner responded · 1 day ago</div>
+          </div>
+          <div class="gbp-activity bright"><div class="adot on"></div>Updated this week</div>
+        </div>
+      </div>
+
+    </div><!-- /comparison -->
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-n">76%</div>
+      <div class="stat-l">of local searches end in a call or visit within 24 hours</div>
+    </div>
+    <div>
+      <div class="stat-n">2.7×</div>
+      <div class="stat-l">more likely to be considered reputable with a complete, active profile</div>
+    </div>
+    <div>
+      <div class="stat-n">88%</div>
+      <div class="stat-l">of customers trust online reviews as much as a personal recommendation</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="sec problem-sec">
+  <div class="sec-in">
+    <div class="eyebrow tc">The Problem</div>
+    <h2 class="sec-h tc">Most Contractors Are Invisible on Google — and Don't Know It</h2>
+    <p class="sec-p tc" style="margin: 0 auto 48px;">You do great work. But when a homeowner searches for an HVAC contractor at 9pm, Google shows whoever has the most active, trustworthy-looking profile. That's usually not you.</p>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-ico"><svg class="icon"><use href="#i-flatline"/></svg></div>
+        <div class="prob-title">No photos, no posts, no pulse</div>
+        <div class="prob-text">Google treats an inactive profile as low-trust. If you haven't posted in months, you're telling Google — and every potential customer — that you might not even be open anymore.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-ico"><svg class="icon"><use href="#i-message"/></svg></div>
+        <div class="prob-title">Unanswered reviews are costing you jobs</div>
+        <div class="prob-text">84% of customers read how businesses respond to reviews before they call. Leaving reviews unanswered tells potential customers nobody's paying attention at your company.</div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-ico"><svg class="icon"><use href="#i-trend-down"/></svg></div>
+        <div class="prob-title">Competitors get your calls every day</div>
+        <div class="prob-text">The contractors ranking at the top of Google Maps aren't always the best in town — they're the ones with the most optimized, active profiles. That's a fixable problem.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec how-sec" id="how">
+  <div class="sec-in">
+    <div class="eyebrow tc">How It Works</div>
+    <h2 class="sec-h tc">Set Up Once. We Handle the Rest.</h2>
+    <p class="sec-p tc" style="margin: 0 auto 48px;">You don't learn any new tools. You don't log in anywhere. We get access to your Google Business Profile and keep it working for you every week.</p>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">We audit your profile</div>
+        <div class="step-text">We run a full audit of your Google Business Profile, identify what's holding back your ranking, and show you exactly how your top competitors are beating you.</div>
+        <div class="step-conn"></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">We optimize everything</div>
+        <div class="step-text">We rewrite your description, fix your categories, add photos, and correct any information that's costing you visibility in local search results.</div>
+        <div class="step-conn"></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">We keep it active, every week</div>
+        <div class="step-text">Weekly posts, professional review responses, and a monthly performance report — handled every month, so your profile never goes dark again.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="sec deliv-sec">
+  <div class="sec-in">
+    <div class="eyebrow">What's Included</div>
+    <h2 class="sec-h">You're Buying More Calls, Not More Tasks</h2>
+    <p class="sec-p">Here's what we do every month to keep your Google presence working harder than your competitors'.</p>
+    <div class="deliv-grid">
+      <div class="deliv-card">
+        <div class="deliv-ico"><svg class="icon"><use href="#i-edit"/></svg></div>
+        <div class="deliv-out">→ More visibility</div>
+        <div class="deliv-title">Weekly Google Posts</div>
+        <div class="deliv-text">4 posts per month written for your specific trade and season — seasonal tips, service promotions, trust-builders — keeping your profile active in Google's eyes.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-ico"><svg class="icon"><use href="#i-star"/></svg></div>
+        <div class="deliv-out">→ More trust</div>
+        <div class="deliv-title">Review Responses</div>
+        <div class="deliv-text">Every review gets a professional, personalized response within 48 hours. Even negative reviews become trust signals when handled correctly.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-ico"><svg class="icon"><use href="#i-wrench"/></svg></div>
+        <div class="deliv-out">→ Higher ranking</div>
+        <div class="deliv-title">Profile Optimization</div>
+        <div class="deliv-text">Rewritten description, correct service categories, photo strategy, accurate service areas — everything Google uses to decide who shows up first.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-ico"><svg class="icon"><use href="#i-search"/></svg></div>
+        <div class="deliv-out">→ Competitive edge</div>
+        <div class="deliv-title">Competitor Monitoring</div>
+        <div class="deliv-text">Monthly comparison against your top 3 local competitors — so you always know where you stand and exactly what gap we're closing for you.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-ico"><svg class="icon"><use href="#i-bar-chart"/></svg></div>
+        <div class="deliv-out">→ Clear results</div>
+        <div class="deliv-title">Monthly Performance Report</div>
+        <div class="deliv-text">A plain-English summary of calls, direction requests, website clicks, and review growth — so you know exactly what your profile is doing for your business each month.</div>
+      </div>
+      <div class="deliv-card hi">
+        <div class="deliv-ico" style="background:rgba(22,163,74,0.12);"><svg class="icon"><use href="#i-shield-check"/></svg></div>
+        <div class="deliv-out">→ Zero extra work</div>
+        <div class="deliv-title">Fully Done for You</div>
+        <div class="deliv-text">You don't log in anywhere or approve anything. We handle all of it. You focus on the job. We focus on making sure your phone keeps ringing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY THIS MATTERS -->
+<section class="sec proof-sec">
+  <div class="sec-in">
+    <div class="eyebrow tc">Why This Matters</div>
+    <h2 class="sec-h wh tc">The Research Behind Profile Management</h2>
+    <p class="sec-p wh tc" style="margin: 0 auto 48px;">We're a new service, so rather than ask you to trust our own numbers, here's what independent research shows about what an active, well-managed profile actually does.</p>
+    <div class="research-grid">
+      <div class="rmetric">
+        <div class="metric-n">+42%</div>
+        <div class="metric-l">More requests for directions on profiles with photos — plus 35% more website clicks</div>
+        <div class="metric-src">Source: Google Business Profile data</div>
+      </div>
+      <div class="rmetric">
+        <div class="metric-n">42%</div>
+        <div class="metric-l">Of consumers say they won't use a business that never responds to its reviews</div>
+        <div class="metric-src">Source: BrightLocal, Local Consumer Review Survey 2026</div>
+      </div>
+      <div class="rmetric">
+        <div class="metric-n">200+</div>
+        <div class="metric-l">Average reviews for businesses ranking in the local top 3 — vs. roughly 39 for the average local business</div>
+        <div class="metric-src">Source: BrightLocal / BizIQ review benchmarking</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sec pricing-sec" id="pricing">
+  <div class="sec-in">
+    <div class="eyebrow tc">Pricing</div>
+    <h2 class="sec-h tc">One Average Job Pays for the Whole Month</h2>
+    <p class="sec-p tc" style="margin: 0 auto 48px;">No contracts. No setup fees. Cancel anytime. The question isn't whether you can afford it — it's whether you can afford to keep losing calls to competitors who rank higher.</p>
+    <div class="pricing-grid">
+
+      <div class="pcard">
+        <div class="p-phase">Phase 1</div>
+        <div class="founding-chip"><svg class="icon"><use href="#i-lock"/></svg>Founding Rate — Limited Spots</div>
+        <div class="p-name">Starter</div>
+        <div class="p-price"><sup>$</sup>149</div>
+        <div class="p-per">per month · price locks in for 6 months</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Full profile audit &amp; initial optimization</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> 4 weekly Google posts per month</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Professional responses to all reviews</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Monthly performance report</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Priority onboarding (48-hr turnaround)</li>
+        </ul>
+        <a href="#audit" class="p-btn">Claim Founding Rate →</a>
+        <div class="p-note">Only 5 founding spots available</div>
+      </div>
+
+      <div class="pcard feat">
+        <div class="feat-badge">Most Popular</div>
+        <div class="p-phase">Phase 2</div>
+        <div class="p-name">Standard</div>
+        <div class="p-price"><sup>$</sup>299</div>
+        <div class="p-per">per month · no contract, cancel anytime</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Everything in Starter</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Competitor monitoring (top 3 rivals)</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Photo upload &amp; optimization strategy</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Google Q&amp;A management</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Review response within 24 hours</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Dedicated account manager</li>
+        </ul>
+        <a href="#audit" class="p-btn g">Get Started →</a>
+        <div class="p-note">Best for established contractors ready to grow</div>
+      </div>
+
+      <div class="pcard">
+        <div class="p-phase">Phase 3</div>
+        <div class="p-name">Premium</div>
+        <div class="p-price"><sup>$</sup>499</div>
+        <div class="p-per">per month · up to 3 locations</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Everything in Standard</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Management of up to 3 GBP locations</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> 12-hour review response guarantee</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Monthly strategy call (30 min)</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Expanded competitor analysis (top 5)</li>
+          <li><span class="chk"><svg class="icon"><use href="#i-check"/></svg></span> Custom content calendar</li>
+        </ul>
+        <a href="#audit" class="p-btn">Contact for Availability →</a>
+        <div class="p-note">Limited to 5 premium clients at a time</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AUDIT CTA -->
+<section class="cta-sec" id="audit">
+  <div class="cta-wrap">
+    <h2>Find Out Exactly Why You're Not Ranking on Google Maps</h2>
+    <p>We'll audit your Google Business Profile for free and send you a one-page report showing what's holding your ranking back and what a local competitor is doing better. No pitch. No obligation.</p>
+    <div class="aform">
+      <form id="auditForm">
+        <h3>Get Your Free Google Profile Audit</h3>
+        <div class="frow">
+          <div class="ff"><label>Your Name</label><input type="text" name="full_name" placeholder="Mike Johnson" required></div>
+          <div class="ff"><label>Business Name</label><input type="text" name="business_name" placeholder="Mike's HVAC Services" required></div>
+        </div>
+        <div class="frow">
+          <div class="ff"><label>Trade / Business Type</label><input type="text" name="trade" placeholder="HVAC, Plumbing, Roofing..." required></div>
+          <div class="ff"><label>City / Service Area</label><input type="text" name="city" placeholder="Tulsa, OK" required></div>
+        </div>
+        <div class="ff"><label>Email Address</label><input type="email" name="email" placeholder="mike@mikesvac.com" required></div>
+        <button type="submit" class="fsub">Send Me My Free Audit →</button>
+        <div class="fnote" id="formNote">We'll send your audit within 24 hours. We don't share your info or send spam, ever.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec faq-sec">
+  <div class="sec-in">
+    <div class="eyebrow tc">Questions</div>
+    <h2 class="sec-h tc" style="margin-bottom: 40px;">Common Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-q">Do I need to give you my Google login?</div>
+        <div class="faq-a">No. We use Google's built-in manager access feature. You add us as a manager on your profile — it's one step that takes about 30 seconds — and you keep full ownership. You can remove our access at any time.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How long before I see results?</div>
+        <div class="faq-a">Profile optimization typically starts improving visibility within 2–4 weeks. More meaningful changes — increased calls, more Google Maps appearances — usually show clearly within 60–90 days. We send you a report each month showing exactly what changed.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if I already have a pretty good Google profile?</div>
+        <div class="faq-a">Most business owners think their profile is fine until they see a competitor comparison side by side. The free audit will show you honestly where you stand. If you're genuinely ahead, we'll tell you that — no hard sell.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is there a long-term contract?</div>
+        <div class="faq-a">No contracts, ever. You pay month to month and can cancel before your next billing date. The founding rate locks in for 6 months while you remain a client — that's the only time-based commitment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-logo"><div class="logo-pin" style="width:20px;height:20px;"><div class="logo-pin-dot" style="width:7px;height:7px;"></div></div>Nearpost</div>
+    <div class="foot-txt">Google Business Profile Management for Local Contractors</div>
+    <div class="foot-txt">© 2026 Nearpost · hello@nearpost.co</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // 1. In Make.com, create a scenario that starts with a "Custom Webhook" trigger.
+  // 2. Copy the webhook URL it gives you and paste it below, replacing the placeholder.
+  // 3. Add steps after it in Make (e.g. Google Sheets "Add a Row", then Email "Send an Email")
+  //    to receive submissions.
+  var WEBHOOK_URL = "https://hook.us2.make.com/vv8ozute43jbeyq3tbq9840b5s8n7k7l";
+
+  var form = document.getElementById('auditForm');
+  var note = document.getElementById('formNote');
+  var btn = form.querySelector('.fsub');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (WEBHOOK_URL.indexOf('PASTE_YOUR') !== -1) {
+      note.textContent = "Form isn't connected yet — add your Make.com webhook URL in the page code.";
+      note.style.color = '#B91C1C';
+      return;
+    }
+
+    var data = Object.fromEntries(new FormData(form).entries());
+    data.submitted_at = new Date().toISOString();
+
+    btn.disabled = true;
+    btn.textContent = "Sending...";
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Network error');
+        form.innerHTML =
+          '<div style="text-align:center; padding: 20px 0;">' +
+          '<svg style="width:40px;height:40px;color:#16A34A;margin-bottom:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.8 12.3l2.7 2.7L16.3 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<h3 style="font-family: var(--display); color: var(--navy); margin-bottom:8px;">Got it — thank you!</h3>' +
+          '<p style="color: var(--muted); font-size:14px;">We\'ll send your free Google Profile audit within 24 hours.</p>' +
+          '</div>';
+      })
+      .catch(function () {
+        btn.disabled = false;
+        btn.textContent = "Send Me My Free Audit →";
+        note.textContent = "Something went wrong — email us directly at hello@nearpost.co and we'll get your audit started.";
+        note.style.color = '#B91C1C';
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
