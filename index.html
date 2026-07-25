@@ -724,6 +724,10 @@ footer { background: var(--navy); padding: 36px 24px; }
           <div class="ff"><label>City / Service Area</label><input type="text" name="city" placeholder="Tulsa, OK" required></div>
         </div>
         <div class="ff"><label>Email Address</label><input type="email" name="email" placeholder="mike@mikesvac.com" required></div>
+        <div style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+          <label for="website">Leave this field empty</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
         <button type="submit" class="fsub">Send Me My Free Audit →</button>
         <div class="fnote" id="formNote">We'll send your audit within 24 hours. We don't share your info or send spam, ever.</div>
       </form>
@@ -788,6 +792,14 @@ footer { background: var(--navy); padding: 36px 24px; }
     }
 
     var data = Object.fromEntries(new FormData(form).entries());
+    if (data.website) {
+      // Honeypot triggered — likely a bot. Pretend success, send nothing.
+      form.innerHTML =
+        '<div style="text-align:center; padding: 20px 0;">' +
+        '<h3 style="font-family: var(--display); color: var(--navy);">Got it — thank you!</h3>' +
+        '</div>';
+      return;
+    }
     data.submitted_at = new Date().toISOString();
 
     btn.disabled = true;
