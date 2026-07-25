@@ -32,7 +32,7 @@ body { font-family: var(--body); background: var(--bg); color: var(--text); line
 
 /* ===== ICON SYSTEM ===== */
 .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
-.no-photos-icon svg { width: 26px; height: 26px; color: #B0B6C0; }
+.no-photos-icon svg { width: 26px; height: 26px; color: #9CA3AF; }
 .gbp-warn svg { width: 12px; height: 12px; color: #92400E; }
 .gbp-post svg { width: 12px; height: 12px; color: #1A73E8; margin-right: 3px; }
 .rev-resp svg { width: 11px; height: 11px; color: #16A34A; margin-right: 2px; }
@@ -271,7 +271,7 @@ nav {
 .rmetric { background: var(--navy-light); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px 22px; text-align: center; }
 .rmetric .metric-n { font-family: var(--display); font-size: 40px; font-weight: 800; color: #4ADE80; line-height: 1; margin-bottom: 12px; }
 .rmetric .metric-l { font-size: 14px; color: #CBD5E1; line-height: 1.55; margin-bottom: 14px; }
-.metric-src { font-size: 11px; color: #64748B; font-style: italic; }
+.metric-src { font-size: 11px; color: #94A3B8; font-style: italic; }
 .metrics { display: flex; flex-direction: column; gap: 24px; }
 .metric { display: flex; align-items: flex-start; gap: 16px; }
 .metric-n { font-family: var(--display); font-size: 44px; font-weight: 800; color: #4ADE80; line-height: 1; flex-shrink: 0; }
@@ -716,14 +716,14 @@ footer { background: var(--navy); padding: 36px 24px; }
       <form id="auditForm">
         <h3>Get Your Free Google Profile Audit</h3>
         <div class="frow">
-          <div class="ff"><label>Your Name</label><input type="text" name="full_name" placeholder="Mike Johnson" required></div>
-          <div class="ff"><label>Business Name</label><input type="text" name="business_name" placeholder="Mike's HVAC Services" required></div>
+          <div class="ff"><label for="full_name">Your Name</label><input type="text" id="full_name" name="full_name" placeholder="Mike Johnson" required></div>
+          <div class="ff"><label for="business_name">Business Name</label><input type="text" id="business_name" name="business_name" placeholder="Mike's HVAC Services" required></div>
         </div>
         <div class="frow">
-          <div class="ff"><label>Trade / Business Type</label><input type="text" name="trade" placeholder="HVAC, Plumbing, Roofing..." required></div>
-          <div class="ff"><label>City / Service Area</label><input type="text" name="city" placeholder="Tulsa, OK" required></div>
+          <div class="ff"><label for="trade">Trade / Business Type</label><input type="text" id="trade" name="trade" placeholder="HVAC, Plumbing, Roofing..." required></div>
+          <div class="ff"><label for="city">City / Service Area</label><input type="text" id="city" name="city" placeholder="Tulsa, OK" required></div>
         </div>
-        <div class="ff"><label>Email Address</label><input type="email" name="email" placeholder="mike@mikesvac.com" required></div>
+        <div class="ff"><label for="email">Email Address</label><input type="email" id="email" name="email" placeholder="mike@mikesvac.com" required></div>
         <div style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
           <label for="website">Leave this field empty</label>
           <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
